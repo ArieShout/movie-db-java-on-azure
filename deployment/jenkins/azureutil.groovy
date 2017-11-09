@@ -141,9 +141,9 @@ def deployDataApp(String targetEnv, String resGroup) {
         kubectl apply -f target/fabric8/namespace.yml
     """
 
-    acsDeploy azureCredentialsId: 'azure-sp', configFilePaths: 'data-app/target/fabric8/namespace.yml', containerService: 'acs | Kubernetes', enableConfigSubstitution: true, resourceGroupName: resGroup, sshCredentialsId: 'acs-ssh'
-    acsDeploy azureCredentialsId: 'azure-sp', configFilePaths: 'data-app/target/fabric8/deployment.yml', containerService: 'acs | Kubernetes', enableConfigSubstitution: true, resourceGroupName: resGroup, sshCredentialsId: 'acs-ssh'
-    acsDeploy azureCredentialsId: 'azure-sp', configFilePaths: 'data-app/target/fabric8/service.yml', containerService: 'acs | Kubernetes', enableConfigSubstitution: true, resourceGroupName: resGroup, sshCredentialsId: 'acs-ssh'
+    acsDeploy azureCredentialsId: '139fd251-fb55-4c18-a5e6-5b89f6a396e8', configFilePaths: 'data-app/target/fabric8/namespace.yml', containerService: 'menxiao-k8s | Kubernetes', enableConfigSubstitution: true, resourceGroupName: 'menxiao-k8s', sshCredentialsId: '6405290c-b6c7-47a5-9289-7b29e08e1a35'
+    acsDeploy azureCredentialsId: '139fd251-fb55-4c18-a5e6-5b89f6a396e8', configFilePaths: 'data-app/target/fabric8/deployment.yml', containerService: 'menxiao-k8s | Kubernetes', enableConfigSubstitution: true, resourceGroupName: 'menxiao-k8s', sshCredentialsId: '6405290c-b6c7-47a5-9289-7b29e08e1a35'
+    acsDeploy azureCredentialsId: '139fd251-fb55-4c18-a5e6-5b89f6a396e8', configFilePaths: 'data-app/target/fabric8/service.yml', containerService: 'menxiao-k8s | Kubernetes', enableConfigSubstitution: true, resourceGroupName: 'menxiao-k8s', sshCredentialsId: '6405290c-b6c7-47a5-9289-7b29e08e1a35'
 
     // Alternatively, we can use kubernetesDeploy, which is more general
     // def masterHost = sh(
