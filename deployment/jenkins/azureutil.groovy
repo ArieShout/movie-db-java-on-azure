@@ -37,7 +37,9 @@ def prepareEnv(String targetEnv) {
         client_id=$(cat /etc/kubernetes/azure.json | python -c "import sys, json; print json.load(sys.stdin)['aadClientId']")
         client_secret=$(cat /etc/kubernetes/azure.json | python -c "import sys, json; print json.load(sys.stdin)['aadClientSecret']")
         tenant_id=$(cat /etc/kubernetes/azure.json | python -c "import sys, json; print json.load(sys.stdin)['tenantId']")
+        subscription_id=$(cat /etc/kubernetes/azure.json | python -c "import sys, json; print json.load(sys.stdin)['subscriptionId']")
         az login --service-principal -u ${client_id} -p ${client_secret} --tenant ${tenant_id}
+        az account set --subscription ${subscription_id}
     '''
 
     this.acrName = sh(
