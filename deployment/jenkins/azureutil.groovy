@@ -83,6 +83,8 @@ def deployWebApp(String resGroup, String dockerFilePath) {
             script: "az webapp list --resource-group ${resGroup} --query [0].name | tr -d '\"'",
             returnStdout: true
     ).trim()
+
+    azureWebAppPublish appName: appName, azureCredentialsId: 'azure-sp', dockerImageName: "${this.acrName}.azurecr.io/web-app", dockerImageTag: '', dockerRegistryEndpoint: [credentialsId: 'acr', url: "https://${this.acrName}.azurecr.io"], publishType: 'docker', resourceGroup: resGroup
     
     sh """
         data_api_endpoint=\$(az network traffic-manager profile list -g ${config.COMMON_GROUP} --query [0].dnsConfig.fqdn | tr -d '"')
@@ -97,12 +99,12 @@ def deployWebApp(String resGroup, String dockerFilePath) {
         redis_host=\$(az redis show -g ${config.COMMON_GROUP} -n \${redis_name} --query hostName | tr -d '"')
         redis_password=\$(az redis list-keys -g ${config.COMMON_GROUP} -n \${redis_name} --query primaryKey | tr -d '"')
 
-        az webapp config container set --ids \${webapp_id} \\
-                                      --docker-custom-image-name ${acrLoginServer}/web-app:${BUILD_ID} \\
-                                      --docker-registry-server-url http://${acrLoginServer} \\
-                                      --docker-registry-server-user ${acrUsername} \\
-                                      --docker-registry-server-password ${acrPassword}
-        az webapp config set --ids \${webapp_id} --linux-fx-version "DOCKER|${acrLoginServer}/web-app:${BUILD_ID}"
+        #az webapp config container set --ids \${webapp_id} \\
+        #                              --docker-custom-image-name ${acrLoginServer}/web-app:${BUILD_ID} \\
+        #                              --docker-registry-server-url http://${acrLoginServer} \\
+        #                              --docker-registry-server-user ${acrUsername} \\
+        #                              --docker-registry-server-password ${acrPassword}
+        #az webapp config set --ids \${webapp_id} --linux-fx-version "DOCKER|${acrLoginServer}/web-app:${BUILD_ID}"
         az webapp config appsettings set --ids \${webapp_id} \\
                                         --settings  DATA_API_URL=\${data_api_endpoint} \\
                                                     PORT=${config.WEB_APP_CONTAINER_PORT} \\
