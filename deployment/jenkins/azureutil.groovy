@@ -81,6 +81,7 @@ def deployFunctionApp() {
 }
 
 def deployWebApp(String resGroup, String dockerFilePath) {
+    sh "az webapp list --resource-group ${resGroup}"
     def appName = sh(
             script: "az webapp list --resource-group ${resGroup} --query '[0].name' | tr -d '\"'",
             returnStdout: true
