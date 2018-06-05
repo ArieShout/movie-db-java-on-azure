@@ -37,7 +37,9 @@ def prepareEnv(String targetEnv) {
         client_id=$(cat /etc/kubernetes/azure.json | python -c "import sys, json; print json.load(sys.stdin)['aadClientId']")
         client_secret=$(cat /etc/kubernetes/azure.json | python -c "import sys, json; print json.load(sys.stdin)['aadClientSecret']")
         tenant_id=$(cat /etc/kubernetes/azure.json | python -c "import sys, json; print json.load(sys.stdin)['tenantId']")
+        set +x
         az login --service-principal -u ${client_id} -p ${client_secret} --tenant ${tenant_id}
+        set -x
     '''
 
     this.acrName = sh(
@@ -83,6 +85,12 @@ def deployWebApp(String resGroup, String dockerFilePath) {
             script: "az webapp list --resource-group ${resGroup} --query [0].name | tr -d '\"'",
             returnStdout: true
     ).trim()
+
+    echo "====================================== dump parameters ======================================"
+    echo "appName = ${appName}"
+    echo "dockerImageName = ${this.acrName}.azurecr.io/web-app"
+    echo "resGroup = ${resGroup}"
+    echo "============================================================================================="
 
     azureWebAppPublish appName: appName, azureCredentialsId: 'azure-sp', dockerImageName: "${this.acrName}.azurecr.io/web-app", dockerImageTag: '', dockerRegistryEndpoint: [credentialsId: 'acr', url: "https://${this.acrName}.azurecr.io"], publishType: 'docker', resourceGroup: resGroup
     
